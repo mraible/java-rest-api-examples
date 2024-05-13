@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: 'maven'
+    directories:
+      - '/imperative/helidon'
+      - '/reactive/helidon'
+    schedule:
+      interval: 'daily'
+  - package-ecosystem: 'gradle'
+    directories:
+      - '/imperative/micronaut'
+      - '/reactive/micronaut'
+      - '/imperative/quarkus'
+      - '/reactive/quarkus'
+      - '/imperative/spring-boot'
+      - '/reactive/spring-boot'
+    schedule:
+      interval: 'daily'
