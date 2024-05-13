@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  host: 0.0.0.0
+
+security:
+  providers:
+    - jwt:
+        atn-token:
+          jwk.resource.uri: https://mraible.us.auth0.com/.well-known/jwks.json
+  web-server:
+    defaults:
+      authenticate: true
+    paths:
+      - path: "/hello"
+        methods: ["get"]

@@ -1,0 +1,477 @@
+:experimental:
+:commandkey: &#8984;
+:toc: macro
+:source-highlighter: highlight.js
+
+=  Native Java REST API Demo Steps
+
+These instructions show how to create native images with Micronaut, Quarkus, Spring Boot, and Helidon. You'll learn how to run a secure, OAuth 2.0-protected, Java REST API that allows JWT authentication.
+
+**Prerequisites:**
+
+- https://sdkman.io/[SDKMAN] (for Java 21 with GraalVM)
+- https://httpie.io/[HTTPie] (a better version of cURL)
+- A free https://auth0.com/signup[Auth0 account] and the https://github.com/auth0/auth0-cli#installation[Auth0 CLI]
+
+TIP: The brackets at the end of some steps indicate the IntelliJ Live Templates to use. You can find the template definitions at https://github.com/mraible/idea-live-templates[mraible/idea-live-templates].
+
+toc::[]
+
+== Install a JDK with GraalVM
+
+Use SDKMAN to install Java 21 with GraalVM
+
+  sdk install java 21.0.2-graalce
+
+== Generate an OAuth 2.0 Access Token
+
+. Install the https://github.com/auth0/auth0-cli#installation[
+ Auth0 CLI] and run `auth0 login` to connect it to your account.
+
+. Create an access token using Auth0's CLI:
++
+[source,shell]
+----
+auth0 test token -a https://<your-auth0-domain>/api/v2/ -s openid
+----
+
+. Set the access token as a `TOKEN` environment variable in a terminal window.
+
+  TOKEN=eyJraWQiOiJYa2pXdjMzTDRBYU1ZSzNGM...
+
+== Make a Java REST API with Micronaut
+
+. Use SDKMAN to install Micronaut's CLI and create an app:
++
+[source,shell]
+----
+sdk install micronaut
+mn create-app com.example.rest.app -f security-jwt -f micronaut-aot
+mv app micronaut
+----
+
+. Create `controller/HelloController.java`: [`mn-hello`]
++
+[source,java]
+----
+package com.example.rest.controller;
+
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Produces;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
+
+import java.security.Principal;
+
+@Controller("/hello")
+public class HelloController {
+
+    @Get
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(Principal principal) {
+        return "Hello, " + principal.getName() + "!";
+    }
+
+}
+----
+
+. Enable and configure JWT security in `src/main/resources/application.properties`: [`mn-security-config`]
++
+[source,properties]
+----
+micronaut.security.token.jwt.signatures.jwks.okta.url=https://dev-06bzs1cu.us.auth0.com/.well-known/jwks.json
+----
+
+=== Run and Test Your Micronaut API with HTTPie
+
+. Start your app:
+
+  ./gradlew run
+
+. Use HTTPie to pass the JWT in as a bearer token in the `Authorization` header:
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
++
+You should get a 200 response with your user id in it.
+
+=== Build a Native Micronaut App
+
+. Compile your Micronaut app into a native binary:
+
+  ./gradlew nativeCompile
+
+. Start your Micronaut app:
+
+  ./build/native/nativeCompile/app
+
+. Test it with HTTPie and an access token. You may have to generate a new JWT if yours has expired.
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
+
+== Create a Java REST API with Quarkus
+
+. Use SDKMAN to install the Quarkus CLI and create a new app with JWT support:
++
+[source,shell]
+----
+sdk install quarkus
+quarkus create app com.example.rest:quarkus \
+  --extension="smallrye-jwt,rest" \
+  --gradle
+----
+
+. Rename `HelloResource.java` to `HelloResource.java` and add user information to the `hello()` method: [`qk-hello`]
++
+[source,java]
+----
+package com.example.rest;
+
+import io.quarkus.security.Authenticated;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.SecurityContext;
+import java.security.Principal;
+
+@Path("/hello")
+public class HelloResource {
+
+    @GET
+    @Authenticated
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(@Context SecurityContext context) {
+        Principal userPrincipal = context.getUserPrincipal();
+        return "Hello, " + userPrincipal.getName() + "!";
+    }
+}
+----
+
+. Add your Auth0 endpoints to `src/main/resources/application.properties`: [`qk-properties`]
++
+[source,properties]
+----
+mp.jwt.verify.issuer=https://<your-auth0-domain>/
+mp.jwt.verify.publickey.location=${mp.jwt.verify.issuer}.well-known/jwks.json
+----
+
+. Rename `GreetingResourceTest` to `HelloResourceTest` and modify it to expect a 401 instead of a 200:
++
+[source,java]
+----
+package com.example.rest;
+
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
+
+@QuarkusTest
+public class HelloResourceTest {
+
+    @Test
+    public void testHelloEndpoint() {
+        given()
+            .when().get("/hello")
+            .then()
+            .statusCode(401);
+    }
+
+}
+----
+
+=== Run and Test Your Quarkus API with HTTPie
+
+. Run your Quarkus app:
+
+  quarkus dev # or use Gradle: ./gradlew --console=plain quarkusDev
+
+. Test it from another terminal:
+
+  http :8080/hello
+
+. Test with access token:
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
+
+=== Build a Native Quarkus App
+
+. Compile your Quarkus app into a native binary:
+
+  quarkus build --native # Gradle: ./gradlew build -Dquarkus.package.type=native
+
+. Start your Quarkus app:
+
+  ./build/quarkus-1.0.0-SNAPSHOT-runner
+
+. Test it with HTTPie and an access token:
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
+
+== Start a Java REST API with Spring Boot
+
+. Use SDKMAN to install the Spring Boot CLI. Then, create a Spring Boot app with OAuth 2.0 support:
++
+[source,shell]
+----
+sdk install springboot
+spring init -d=web,oauth2-resource-server,native \
+  --group-id=com.example.rest --package-name=com.example.rest spring-boot
+----
+
+. Add a `HelloController` class that returns the user's information: [`sb-hello`]
++
+[source,java]
+----
+package com.example.rest.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
+
+@RestController
+public class HelloController {
+
+    @GetMapping("/hello")
+    public String hello(Principal principal) {
+        return "Hello, " + principal.getName() + "!";
+    }
+
+}
+----
+
+. Configure the app to be an OAuth 2.0 resource server by adding the issuer to `application.properties`.
++
+[source,properties]
+----
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<your-auth0-domain>/
+----
+
+=== Run and Test Your Spring Boot API with HTTPie
+
+. Start your app from your IDE or using a terminal:
+
+  ./gradlew bootRun
+
+. Test your API with an access token.
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
+
+=== Build a Native Spring Boot App
+
+. Compile your Spring Boot app into a native executable:
+
+  ./gradlew nativeCompile
++
+TIP: To build a native app and a Docker container, use the Spring Boot Gradle plugin and `./gradlew bootBuildImage`.
+
+. Start your Spring Boot app:
+
+  ./build/native/nativeCompile/spring-boot
+
+. Test your API with an access token.
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
+
+== Build a Java REST API with Helidon
+
+. Use SDKMAN to install the Helidon CLI. Then, create a Helidon app:
++
+[source,shell]
+----
+sdk install helidon
+helidon init --flavor MP --groupid com.example.rest \
+  --artifactid helidon --package com.example.rest --batch
+----
++
+TIP: See https://blogs.oracle.com/developers/post/migrating-a-helidon-se-application-to-gradle[Migrating a Helidon SE application to Gradle] for Gradle support.
+
+. Add MicroProfile JWT support in `pom.xml`:
++
+[source,xml]
+----
+<dependency>
+    <groupId>io.helidon.microprofile.jwt</groupId>
+    <artifactId>helidon-microprofile-jwt-auth</artifactId>
+</dependency>
+----
+
+. Delete the default Java classes created by the Helidon CLI:
+
+- On Windows: `del /s *.java`
+- On Mac/Linux: `find . -name '*.java' -delete`
+
+. Add a `HelloResource` class that returns the user's information: [`h-hello`]
++
+[source,java]
+----
+package com.example.rest.controller;
+
+import io.helidon.security.Principal;
+import io.helidon.security.annotations.Authenticated;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Context;
+
+@Path("/hello")
+public class HelloResource {
+
+    @Authenticated
+    @GET
+    public String hello(@Context SecurityContext context) {
+        return "Hello, " + context.userName() + "!";
+    }
+}
+----
+
+. Add a `HelloApplication` class in `src/main/java/com/example/rest` to register your resource and configure JWT authentication: [`h-app`]
++
+[source,java]
+----
+package com.example.rest;
+
+import com.example.rest.controller.HelloResource;
+import org.eclipse.microprofile.auth.LoginConfig;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.Application;
+import java.util.Set;
+
+@LoginConfig(authMethod = "MP-JWT")
+@ApplicationScoped
+public class HelloApplication extends Application {
+
+    @Override
+    public Set<Class<?>> getClasses() {
+        return Set.of(HelloResource.class);
+    }
+}
+----
+
+. Add your Auth0 endpoints to `src/main/resources/META-INF/microprofile-config.properties`.
++
+[source,properties]
+----
+mp.jwt.verify.issuer=https://<your-auth0-domain>/
+mp.jwt.verify.publickey.location=${mp.jwt.verify.issuer}.well-known/jwks.json
+----
+
+=== Run and Test Your Helidon REST API with HTTPie
+
+. Start your app from your IDE or using a terminal:
+
+  helidon dev
+
+. Test your API with an access token.
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
+
+=== Build a native Helidon app with GraalVM
+
+. Compile your Helidon app into a native executable using the `native-image` profile:
+
+  mvn package -Pnative-image
+
+. Start your Helidon app:
+
+  ./target/helidon
+
+. Test your API with an access token.
+
+  http :8080/hello Authorization:"Bearer $TOKEN"
+
+== Startup Time Comparison
+
+. Run each image three times before recording the numbers, then each command five times.
++
+TIP: Use the link:start.sh[`start.sh`] script to get the real time, not what each framework prints to the console.
+
+. Write each time down, add them up, and divide by five for the average. For example:
++
+----
+Micronaut: (37 + 37 + 40 + 38 + 40) / 5 = 38.4
+Micronaut (optimized): (36 + 39 + 41 + 39 + 40) / 5 = 39
+Quarkus: (35 + 48 + 49 + 35 + 43) / 5 = 42
+Spring Boot: (57 + 57 + 62 + 63 + 63) / 5 = 60.4
+Helidon: (67 + 49 + 52 + 50 + 56) / 5 = 54.8
+Helidon (optimized): (52 + 50 + 48 + 50 + 51) / 5 = 50.2
+----
+
+.Native Java startup times in milliseconds
+|===
+|Framework | Command executed | Milliseconds to start
+
+|Micronaut | `./micronaut/build/native/nativeCompile/app` | 38.4
+|Micronaut (optimized) | `./micronaut/build/native/nativeOptimizedCompile/app` | 39
+|Quarkus | `./quarkus/build/quarkus-1.0.0-SNAPSHOT-runner` | 42
+|Spring Boot | `./spring-boot/build/native/nativeCompile/spring-boot` | 60.4
+|Helidon | `./helidon/target/helidon` | 54.8
+|Helidon (optimized) | https://github.com/exampledev/auth0-java-rest-api-examples/pull/2[auth0-java-rest-api-examples/pull/2] | 50.2
+|===
+
+== Memory Usage Comparison
+
+Test the memory usage in MB of each app using the command below. Make sure to send an HTTP request to each one before measuring.
+
+[source,shell]
+----
+ps -o pid,rss,command | grep --color <executable> | awk '{$2=int($2/1024)"M";}{ print;}'
+----
+
+Substitute `<executable>` as follows:
+
+.Native Java memory used in megabytes
+|===
+|Framework | Executable | Megabytes after startup | Megabytes after 1 request| Megabytes after 10 requests
+
+|Micronaut | `app` | 53 | 62 | 66
+|Micronaut (optimized) | `app` | 53 | 63 | 67
+|Quarkus | `quarkus` | 37 | 48 | 52
+|Spring Boot | `spring-boot` | 76 | 86 | 87
+|Helidon | `helidon` | 82 | 92 | 94
+|Helidon (optimized) | `helidon` | 62 | 72 | 74
+|===
+
+----
+./build.sh
+./start.sh micronaut|quarkus|spring-boot|helidon
+./memory.sh $TOKEN micronaut|quarkus|spring-boot|helidon
+----
+
+== What about Virtual Threads?
+
+Micronaut and Helidon support virtual threads by default.
+
+Quarkus requires you add a `@RunOnVirtualThread` annotation.
+
+```diff
+import io.quarkus.security.Authenticated;
+
++import io.smallrye.common.annotation.RunOnVirtualThread;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+@@ -18,6 +19,7 @@ public class HelloResource {
+
+     @Path("/")
+     @Authenticated
+     @Produces(MediaType.TEXT_PLAIN)
++    @RunOnVirtualThread
+     public String hello(@Context SecurityContext context) {
+         Principal userPrincipal = context.getUserPrincipal();
+         return "Hello, " + userPrincipal.getName() + "!";
+```
+
+Spring Boot requires a `spring.threads.virtual.enabled=true` property.
+
+```diff
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://mraible.us.auth0.com/
++spring.threads.virtual.enabled=true
+```
