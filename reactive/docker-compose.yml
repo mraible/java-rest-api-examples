@@ -1,20 +1,22 @@
-micronaut:
-  image: mraible/micronaut-reactive:latest
-  platform: linux/amd64
-  ports:
-    - 8080:8080
-quarkus:
-  image: mraible/quarkus-reactive:latest
-  platform: linux/amd64
-  ports:
-    - 8081:8080
-spring-boot:
-  image: mraible/spring-boot-reactive:latest
-  platform: linux/amd64
-  ports:
-    - 8082:8080
-helidon:
-  image: mraible/helidon-reactive:latest
-  platform: linux/amd64
-  ports:
-    - 8083:8080
+version: '3.8'
+services:
+  micronaut:
+    image: mraible/micronaut-reactive:latest
+    platform: linux/amd64
+    ports:
+      - 8080:8080
+  quarkus:
+    image: mraible/quarkus-reactive:latest
+    platform: linux/amd64
+    ports:
+      - 8081:8080
+  spring-boot:
+    image: mraible/spring-boot-reactive:latest
+    platform: linux/amd64
+    ports:
+      - 8082:8080
+  helidon:
+    image: mraible/helidon-reactive:latest
+    platform: linux/amd64
+    ports:
+      - 8083:8080
