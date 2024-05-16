@@ -1,0 +1,45 @@
+name: Quarkus
+
+on: [pull_request]
+
+jobs:
+  changes:
+    name: Check for changes
+    runs-on: ubuntu-latest
+    outputs:
+      app: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure apps to test
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            imperative/quarkus: imperative/quarkus/**
+            reactive/quarkus: reactive/quarkus/**
+
+  build:
+    name: Build and test
+    needs: changes
+    if: ${{ needs.changes.outputs.app != '[]' && needs.changes.outputs.app != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.changes.outputs.app) }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./${{ matrix.app }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          cache: 'gradle'
+      - name: Run tests
+        working-directory: ./${{ matrix.app }}
+        run: ./gradlew test
