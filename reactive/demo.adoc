@@ -448,21 +448,31 @@ TIP: Use the link:start.sh[`start.sh`] script to get the real time, not what eac
 . Write each time down, add them up, and divide by five for the average. For example:
 +
 ----
-Micronaut: (49 + 52 + 50 + 47 + 43) / 5 = 48.2
-Quarkus: (47 + 45 + 60 + 46 + 43) / 5 = 48.2
-Spring Boot: (56 + 53 + 60 + 58 + 62) / 5 = 57.8
-Helidon: (269 + 217 + 305 + 183 + 269) / 5 = 248.6
+Micronaut: same as imperative since there's no difference in code
+Quarkus: (25 + 24 + 24 + 24 + 23) / 5 = 24
+Spring Boot: (37 + 40 + 38 + 38 + 38) / 5 = 38.2
+Helidon: (157 + 311 + 375 + 169 + 230) / 5 = 248.4
+----
++
+Printed duration:
++
+----
+Quarkus: (10 + 10 + 10 + 10 + 10) / 5 = 10
+Spring Boot: (22 + 23 + 21 + 21 + 21) / 5 = 21.6
+Helidon: (146 + 303 + 363 + 164 + 220) / 5 = 239.2
 ----
 
 .Native Java startup times in milliseconds
 |===
 |Framework | Command executed | Milliseconds to start
 
-|Micronaut | `./micronaut/build/native/nativeCompile/app` | 48.2
-|Quarkus | `./quarkus/build/quarkus-1.0.0-SNAPSHOT-runner` | 48.2
-|Spring Boot | `./spring-boot/build/native/nativeCompile/spring-boot` | 57.8
-|Helidon | `./helidon/target/helidon` | 248.6
+|Micronaut | `./micronaut/build/native/nativeCompile/app` | 26
+|Quarkus | `./quarkus/build/quarkus-1.0.0-SNAPSHOT-runner` | 24
+|Spring Boot | `./spring-boot/build/native/nativeCompile/spring-boot` | 38.2
+|Helidon | `./helidon/target/helidon` | 248.4
 |===
+
+NOTE: These numbers are from an Apple M3 Max with 64 GB RAM.
 
 == Memory Usage Comparison
 
@@ -477,12 +487,12 @@ Substitute `<executable>` as follows:
 
 .Native Java memory used in megabytes
 |===
-|Framework | Executable | MB after startup | MB after 1 request| MB after 10K requests
+|Framework | Executable | MB after startup | MB after 1 request | MB after 10K requests
 
-|Micronaut | `app` | 53 | 63 | 102
-|Quarkus | `quarkus` | 39 | 49 | 53
-|Spring Boot | `spring-boot` | 75 | 108 | 173
-|Helidon | `helidon` | 50 | 51 | 69
+|Micronaut | `app` | 53 | 63 | 105
+|Quarkus | `quarkus` | 39 | 50 | 55
+|Spring Boot | `spring-boot` | 75 | 108 | 223
+|Helidon | `helidon` | 51 | 52 | 70
 |===
 
 ----

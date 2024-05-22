@@ -396,21 +396,32 @@ TIP: Use the link:start.sh[`start.sh`] script to get the real time, not what eac
 . Write each time down, add them up, and divide by five for the average. For example:
 +
 ----
-Micronaut: (37 + 37 + 40 + 38 + 40) / 5 = 38.4
-Quarkus: (35 + 48 + 49 + 35 + 43) / 5 = 42
-Spring Boot: (57 + 57 + 62 + 63 + 63) / 5 = 60.4
-Helidon: (67 + 49 + 52 + 50 + 56) / 5 = 54.8
+Micronaut: (27 + 26 + 26 + 26 + 25) / 5 = 26
+Quarkus: (17 + 17 + 16 + 17 + 17) / 5 = 16.8
+Spring Boot: (38 + 37 + 37 + 36 + 36) / 5 = 36.8
+Helidon: (29 + 31 + 31 + 30 + 31) / 5 = 30.4
+----
++
+Printed duration:
++
+----
+Micronaut: (9 + 8 + 8 + 8 + 8) / 5 = 8.2
+Quarkus: (9 + 9 + 9 + 9 + 9) / 5 = 9
+Spring Boot: (27 + 26 + 25 + 25 + 25) / 5 = 25.6
+Helidon: (24 + 23 + 23 + 23 + 23) / 5 = 23.2
 ----
 
 .Native Java startup times in milliseconds
 |===
 |Framework | Command executed | Milliseconds to start
 
-|Micronaut | `./micronaut/build/native/nativeCompile/app` | 38.4
-|Quarkus | `./quarkus/build/quarkus-1.0.0-SNAPSHOT-runner` | 42
-|Spring Boot | `./spring-boot/build/native/nativeCompile/spring-boot` | 60.4
-|Helidon | `./helidon/target/helidon` | 54.8
+|Micronaut | `./micronaut/build/native/nativeCompile/app` | 26
+|Quarkus | `./quarkus/build/quarkus-1.0.0-SNAPSHOT-runner` | 16.8
+|Spring Boot | `./spring-boot/build/native/nativeCompile/spring-boot` | 36.8
+|Helidon | `./helidon/target/helidon` | 30.4
 |===
+
+NOTE: These numbers are from an Apple M3 Max with 64 GB RAM.
 
 == Memory Usage Comparison
 
@@ -425,18 +436,19 @@ Substitute `<executable>` as follows:
 
 .Native Java memory used in megabytes
 |===
-|Framework | Executable | Megabytes after startup | Megabytes after 1 request| Megabytes after 10 requests
+|Framework | Executable | Megabytes after startup | Megabytes after 1 request | Megabytes after 10K requests
 
-|Micronaut | `app` | 53 | 62 | 66
-|Quarkus | `quarkus` | 37 | 48 | 52
-|Spring Boot | `spring-boot` | 76 | 86 | 87
-|Helidon | `helidon` | 82 | 92 | 94
+|Micronaut | `app` | 53 | 63 | 105
+|Quarkus | `quarkus` | 37 | 48 | 71
+|Spring Boot | `spring-boot` | 77 | 87 | 109
+|Helidon | `helidon` | 82 | 92 | 69
 |===
 
 ----
 ./build.sh
 ./start.sh micronaut|quarkus|spring-boot|helidon
 ./memory.sh $TOKEN micronaut|quarkus|spring-boot|helidon
+./start-docker.sh mraible/<framework>
 ----
 
 == What about Virtual Threads?
