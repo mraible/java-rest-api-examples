@@ -397,11 +397,9 @@ TIP: Use the link:start.sh[`start.sh`] script to get the real time, not what eac
 +
 ----
 Micronaut: (37 + 37 + 40 + 38 + 40) / 5 = 38.4
-Micronaut (optimized): (36 + 39 + 41 + 39 + 40) / 5 = 39
 Quarkus: (35 + 48 + 49 + 35 + 43) / 5 = 42
 Spring Boot: (57 + 57 + 62 + 63 + 63) / 5 = 60.4
 Helidon: (67 + 49 + 52 + 50 + 56) / 5 = 54.8
-Helidon (optimized): (52 + 50 + 48 + 50 + 51) / 5 = 50.2
 ----
 
 .Native Java startup times in milliseconds
@@ -409,11 +407,9 @@ Helidon (optimized): (52 + 50 + 48 + 50 + 51) / 5 = 50.2
 |Framework | Command executed | Milliseconds to start
 
 |Micronaut | `./micronaut/build/native/nativeCompile/app` | 38.4
-|Micronaut (optimized) | `./micronaut/build/native/nativeOptimizedCompile/app` | 39
 |Quarkus | `./quarkus/build/quarkus-1.0.0-SNAPSHOT-runner` | 42
 |Spring Boot | `./spring-boot/build/native/nativeCompile/spring-boot` | 60.4
 |Helidon | `./helidon/target/helidon` | 54.8
-|Helidon (optimized) | https://github.com/exampledev/auth0-java-rest-api-examples/pull/2[auth0-java-rest-api-examples/pull/2] | 50.2
 |===
 
 == Memory Usage Comparison
@@ -432,11 +428,9 @@ Substitute `<executable>` as follows:
 |Framework | Executable | Megabytes after startup | Megabytes after 1 request| Megabytes after 10 requests
 
 |Micronaut | `app` | 53 | 62 | 66
-|Micronaut (optimized) | `app` | 53 | 63 | 67
 |Quarkus | `quarkus` | 37 | 48 | 52
 |Spring Boot | `spring-boot` | 76 | 86 | 87
 |Helidon | `helidon` | 82 | 92 | 94
-|Helidon (optimized) | `helidon` | 62 | 72 | 74
 |===
 
 ----

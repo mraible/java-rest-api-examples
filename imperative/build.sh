@@ -12,9 +12,6 @@ sdk use java 21.0.2-graalce
 echo "Building Micronaut..."
 cd micronaut && ./gradlew nativeCompile
 
-echo "Building Micronaut (optimized)..."
-./gradlew nativeOptimizedCompile
-
 echo "Building Quarkus..."
 cd ../quarkus && ./gradlew build -Dquarkus.package.type=native
 
