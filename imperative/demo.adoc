@@ -34,6 +34,7 @@ Use SDKMAN to install Java 21 with GraalVM
 ----
 auth0 test token -a https://<your-auth0-domain>/api/v2/ -s openid
 ----
+// mraible.us.auth0.com
 
 . Set the access token as a `TOKEN` environment variable in a terminal window.
 
@@ -82,7 +83,7 @@ public class HelloController {
 +
 [source,properties]
 ----
-micronaut.security.token.jwt.signatures.jwks.okta.url=https://dev-06bzs1cu.us.auth0.com/.well-known/jwks.json
+micronaut.security.token.jwt.signatures.jwks.okta.url=https://<your-auth0-domain>/.well-known/jwks.json
 ----
 
 === Run and Test Your Micronaut API with HTTPie
@@ -292,6 +293,11 @@ helidon init --flavor MP --groupid com.example.rest \
 +
 TIP: See https://blogs.oracle.com/developers/post/migrating-a-helidon-se-application-to-gradle[Migrating a Helidon SE application to Gradle] for Gradle support.
 
+. Delete the default Java classes created by the Helidon CLI:
+
+- On Windows: `del /s *.java`
+- On Mac/Linux: `find . -name '*.java' -delete`
+
 . Add MicroProfile JWT support in `pom.xml`:
 +
 [source,xml]
@@ -301,11 +307,6 @@ TIP: See https://blogs.oracle.com/developers/post/migrating-a-helidon-se-applica
     <artifactId>helidon-microprofile-jwt-auth</artifactId>
 </dependency>
 ----
-
-. Delete the default Java classes created by the Helidon CLI:
-
-- On Windows: `del /s *.java`
-- On Mac/Linux: `find . -name '*.java' -delete`
 
 . Add a `HelloResource` class that returns the user's information: [`h-hello`]
 +
@@ -436,7 +437,7 @@ Substitute `<executable>` as follows:
 
 .Native Java memory used in megabytes
 |===
-|Framework | Executable | Megabytes after startup | Megabytes after 1 request | Megabytes after 10K requests
+|Framework | Executable | MB after startup | MB after 1 request | MB after 10K requests
 
 |Micronaut | `app` | 53 | 63 | 105
 |Quarkus | `quarkus` | 37 | 48 | 71
