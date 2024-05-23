@@ -7,7 +7,13 @@ This repository contains example OAuth 2.0 resource servers built with imperativ
 * [Getting Started](#getting-started)
 * [Links](#links)
 * [Help](#help)
-* [License](#license)
+* [License](#license) 
+
+**Events:**
+
+- [Virtual JUG: May 23, 2024](https://speakerdeck.com/mraible/reactive-java-rest-apis-ftw-virtual-jug-2024)
+
+_See [releases](https://github.com/mraible/jhipster-micro-frontends/releases) for the code from a specific event._
 
 ## Getting Started
 
