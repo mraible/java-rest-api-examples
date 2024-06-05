@@ -13,7 +13,8 @@ This repository contains example OAuth 2.0 resource servers built with imperativ
 
 - [Virtual JUG: May 23, 2024](https://speakerdeck.com/mraible/reactive-java-rest-apis-ftw-virtual-jug-2024)
 
-_See [releases](https://github.com/mraible/java-rest-api-examples/releases) for the code from a specific event._
+> [!TIP]
+> See [releases](https://github.com/mraible/java-rest-api-examples/releases) for the code from a specific event.
 
 ## Getting Started
 
