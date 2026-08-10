@@ -1,7 +1,7 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.6.1"
-    id("io.micronaut.aot") version "4.6.1"
+    id("io.micronaut.application") version "4.6.2"
+    id("io.micronaut.aot") version "4.6.2"
 }
 
 version = "0.1"
@@ -20,7 +20,7 @@ dependencies {
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     testImplementation("io.micronaut:micronaut-http-client")
-    aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.10.7"))
+    aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.10.13"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
 
