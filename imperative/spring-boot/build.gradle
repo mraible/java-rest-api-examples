@@ -23,6 +23,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+tasks.named('bootBuildImage') {
+	environment = ['BP_JVM_VERSION': '25']
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
