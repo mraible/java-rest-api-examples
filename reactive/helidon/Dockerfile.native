@@ -1,12 +1,12 @@
 
 # 1st stage, build the app
-FROM ghcr.io/graalvm/graalvm-community:21.0.0-ol9 as build
+FROM ghcr.io/graalvm/graalvm-community:25-ol9 as build
 
 WORKDIR /usr/share
 
 # Install maven
 RUN set -x && \
-    curl -O https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz && \
+    curl -O https://archive.apache.org/dist/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz && \
     tar -xvf apache-maven-*-bin.tar.gz  && \
     rm apache-maven-*-bin.tar.gz && \
     mv apache-maven-* maven && \
