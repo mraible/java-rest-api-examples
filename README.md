@@ -2,7 +2,7 @@
 
 This repository contains example OAuth 2.0 resource servers built with imperative and reactive versions of Micronaut, Quarkus, Spring Boot, and Helidon. See the [imperative](imperative/demo.adoc) and [reactive](reactive/demo.adoc) demo scripts to see how these examples were created.
 
-**Prerequisites:** [Java 21 with GraalVM](https://sdkman.io/) and [HTTPie](https://httpie.io/).
+**Prerequisites:** [Java 25 with GraalVM](https://sdkman.io/) and [HTTPie](https://httpie.io/).
 
 * [Getting Started](#getting-started)
 * [Links](#links)
@@ -31,7 +31,7 @@ git clone https://github.com/mraible/java-rest-api-examples.git
 You will need a JDK with GraalVM and its native-image compiler. Using [SDKMAN](https://sdkman.io), run the following command and set it as the default:
 
 ```bash
-sdk install java 21.0.2-graalce
+sdk install java 25-graalce
 ```
 
 Next, you'll need a [free Auth0 developer account](https://auth0.com/signup). 

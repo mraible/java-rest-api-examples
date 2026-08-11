@@ -1,7 +1,7 @@
 plugins {
     id("com.gradleup.shadow") version "9.6.1"
-    id("io.micronaut.application") version "4.6.2"
-    id("io.micronaut.aot") version "4.6.2"
+    id("io.micronaut.application") version "5.0.2"
+    id("io.micronaut.aot") version "5.0.2"
 }
 
 version = "0.1"
@@ -20,7 +20,7 @@ dependencies {
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     testImplementation("io.micronaut:micronaut-http-client")
-    aotPlugins(platform("io.micronaut.platform:micronaut-platform:4.10.13"))
+    aotPlugins(platform("io.micronaut.platform:micronaut-platform:5.1.0"))
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
 
@@ -29,8 +29,8 @@ application {
     mainClass = "com.example.rest.Application"
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
+    sourceCompatibility = JavaVersion.toVersion("25")
+    targetCompatibility = JavaVersion.toVersion("25")
 }
 
 
