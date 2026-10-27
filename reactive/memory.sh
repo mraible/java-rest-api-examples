@@ -22,7 +22,8 @@ case "$selected_app" in
     start_command="./spring-boot/build/native/nativeCompile/spring-boot"
     ;;
   "helidon")
-    start_command="./helidon/target/helidon"
+    start_command="./helidon/target/helidon-jri/bin/start"
+    process_name="helidon-jri"
     ;;
   # Add more cases for other apps as needed
   *)
@@ -32,7 +33,7 @@ case "$selected_app" in
 esac
 
 # Extract the executable name using basename
-executable=$(basename "$start_command")
+executable=${process_name:-$(basename "$start_command")}
 
 # Define memory function
 memory() {

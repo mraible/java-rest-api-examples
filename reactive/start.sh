@@ -21,7 +21,7 @@ case "$selected_app" in
     start_command="./spring-boot/build/native/nativeCompile/spring-boot"
     ;;
   "helidon")
-    start_command="./helidon/target/helidon"
+    start_command="./helidon/target/helidon-jri/bin/start"
     ;;
   # Add more cases for other apps as needed
   *)
