@@ -490,8 +490,10 @@ Substitute `<executable>` as follows:
 |Micronaut | `app` | 53 | 63 | 105
 |Quarkus | `quarkus` | 39 | 50 | 55
 |Spring Boot | `spring-boot` | 75 | 108 | 223
-|Helidon | `helidon` | 51 | 52 | 70
+|Helidon | `helidon-jri` | 99 | 169 | 493
 |===
+
+Helidon's numbers are for its jlink image, which runs on the JVM, so it uses more memory than the native executables. Each is the median of three runs of `memory.sh`.
 
 ----
 ./build.sh
