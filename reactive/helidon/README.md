@@ -5,7 +5,7 @@ Sample Helidon SE project that includes multiple REST operations.
 ## Build and run
 
 
-With JDK21
+With JDK 27
 ```bash
 mvn package
 java -jar target/helidon.jar

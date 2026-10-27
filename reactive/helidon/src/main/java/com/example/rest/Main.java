@@ -3,6 +3,7 @@ package com.example.rest;
 import com.example.rest.resource.HelloResource;
 import io.helidon.config.Config;
 import io.helidon.logging.common.LogConfig;
+import io.helidon.service.registry.Services;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.WebServerConfig;
 import io.helidon.webserver.security.SecurityHttpFeature;
@@ -28,7 +29,7 @@ public class Main {
 
     static void setup(WebServerConfig.Builder server) {
         Config config = Config.create();
-        Config.global(config);
+        Services.set(Config.class, config);
 
         server.routing(routing -> routing
             .addFeature(SecurityHttpFeature.create(config.get("security.web-server")))
