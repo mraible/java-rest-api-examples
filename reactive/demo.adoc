@@ -419,22 +419,17 @@ security:
 
   http :8080/hello Authorization:"Bearer $TOKEN"
 
-=== Build a native Helidon app with GraalVM
+=== Build a Helidon jlink image with an AOT cache
 
-. Update `src/main/resources/META-INF/native-image/com.example.rest/helidon/native-image.properties` so native compilation will work with Java 21.
-+
-[source,properties]
-----
-Args=--initialize-at-build-time=com.example.rest --enable-url-protocols=https
-----
+Helidon 27 requires Java 27, and no GraalVM release supports Java 27 yet, so this app uses a custom Java runtime image with an ahead-of-time (AOT) cache instead of a native executable.
 
-. Compile your Helidon app into a native executable using the `native-image` profile:
+. Build the runtime image using the `jlink-image` profile:
 
-  mvn package -Pnative-image
+  mvn package -Pjlink-image
 
 . Start your Helidon app:
 
-  ./target/helidon
+  ./target/helidon-jri/bin/start
 
 . Test your API with an access token.
 

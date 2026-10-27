@@ -18,5 +18,6 @@ cd ../quarkus && ./gradlew build -Dquarkus.package.type=native
 echo "Building Spring Boot..."
 cd ../spring-boot && ./gradlew nativeCompile
 
-echo "Building Helidon..."
-cd ../helidon && mvn package -Pnative-image
+echo "Building Helidon (jlink image with AOT cache, requires Java 27)..."
+sdk use java 27.0.0.0+35-tem
+cd ../helidon && mvn package -Pjlink-image

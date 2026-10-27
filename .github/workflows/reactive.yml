@@ -49,7 +49,7 @@ jobs:
       - name: Build Helidon project
         run: |
           cd reactive/helidon
-          docker build -t helidon -f Dockerfile.native .
+          docker build -t helidon -f Dockerfile.jlink .
           docker tag helidon:latest mraible/helidon-reactive:latest
         shell: bash
 
