@@ -1,0 +1,10 @@
+[
+  {
+    "name": "io.helidon.microprofile.jwt.auth.JwtAuthAnnotationAnalyzer",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "io.helidon.security.abac.role.RoleAnnotationAnalyzer",
+    "queryAllPublicMethods": true
+  }
+]
