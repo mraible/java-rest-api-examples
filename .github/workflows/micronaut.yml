@@ -43,3 +43,13 @@ jobs:
       - name: Run tests
         working-directory: ./${{ matrix.app }}
         run: ./gradlew test
+
+  result:
+    name: Micronaut result
+    needs: [changes, build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any job failed or was cancelled
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
