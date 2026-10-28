@@ -468,7 +468,7 @@ Helidon: (147 + 148 + 147 + 145 + 145) / 5 = 146.4
 |Helidon | `./helidon/target/helidon-jri/bin/start` | 196.8
 |===
 
-Helidon 27 requires Java 27, which GraalVM doesn't support yet, so Helidon's number is for a jlink image with an AOT cache, not a native executable.
+Helidon 27 requires Java 27, but GraalVM releases are based on Java 25, so Helidon's number is for a jlink image with an AOT cache, not a native executable.
 
 NOTE: These numbers are from an Apple M3 Max with 64 GB RAM.
 
