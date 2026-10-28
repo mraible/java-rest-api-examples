@@ -79,7 +79,7 @@ You can also build and run each example as a native app.
 - Micronaut: `./gradlew nativeCompile`
 - Quarkus: `quarkus build --native`
 - Spring Boot: `./gradlew nativeCompile`
-- Helidon: `mvn package -Pnative-image` (imperative) or `mvn package -Pjlink-image` (reactive, which uses a jlink image because no GraalVM release supports Java 27 yet)
+- Helidon: `mvn package -Pnative-image` (imperative) or `mvn package -Pjlink-image` (reactive, which uses a jlink image because Helidon 27 requires Java 27 and GraalVM releases are based on Java 25)
 
 Then, start each app as a native executable.
 

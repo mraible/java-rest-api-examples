@@ -421,7 +421,7 @@ security:
 
 === Build a Helidon jlink image with an AOT cache
 
-Helidon 27 requires Java 27, and no GraalVM release supports Java 27 yet, so this app uses a custom Java runtime image with an ahead-of-time (AOT) cache instead of a native executable.
+Helidon 27 requires Java 27, but GraalVM releases are based on Java 25, so this app uses a custom Java runtime image with an ahead-of-time (AOT) cache instead of a native executable.
 
 . Build the runtime image using the `jlink-image` profile:
 
