@@ -18,7 +18,11 @@ This repository contains example OAuth 2.0 resource servers built with imperativ
 
 ## Getting Started
 
-Clone this repository:
+Click the button below to open this project in GitHub Codespaces. It includes GraalVM for JDK 25, JDK 27, Maven, and Docker.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/mraible/java-rest-api-examples)
+
+Or, if you'd rather try things locally, clone this repository:
 
 ```bash
 git clone https://github.com/mraible/java-rest-api-examples.git
