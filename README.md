@@ -18,11 +18,7 @@ This repository contains example OAuth 2.0 resource servers built with imperativ
 
 ## Getting Started
 
-Click the button below to start a new Gitpod development environment with this project:
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/mraible/java-rest-api-examples)
-
-Or, if you'd rather try things locally, clone this repository:
+Clone this repository:
 
 ```bash
 git clone https://github.com/mraible/java-rest-api-examples.git
